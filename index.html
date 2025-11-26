@@ -1,0 +1,2820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 背单词 - 俊泽专属学习空间</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ffa726);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::after {
+            content: "📚";
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2em;
+        }
+        
+        .heart {
+            color: #ff4081;
+            font-size: 1.5em;
+            margin: 0 5px;
+        }
+        
+        /* 登录页面样式 */
+        .login-container {
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .login-form {
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        .login-input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .login-input:focus {
+            border-color: #ff6b6b;
+            outline: none;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+        
+        .login-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+        
+        .user-info {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+        }
+        
+        .logout-btn {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .admin-btn {
+            background: #9c27b0;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            background: #f5f5f5;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: #e0e0e0;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .tab-button.active {
+            background: white;
+            font-weight: bold;
+            border-bottom: 3px solid #ff6b6b;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .controls {
+            padding: 15px;
+            background: #f8f9fa;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+        
+        button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+        
+        .word-card {
+            padding: 30px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .book-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+        }
+        
+        .english-word {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+            cursor: pointer;
+            padding: 15px 25px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .english-word:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+        }
+        
+        .pronunciation {
+            font-size: 1.3em;
+            color: #666;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        
+        .part-of-speech {
+            font-size: 1.2em;
+            color: #FF9800;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .meaning {
+            font-size: 1.6em;
+            color: #4CAF50;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        
+        .progress {
+            text-align: center;
+            padding: 15px;
+            background: #e3f2fd;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .word-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .word-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .word-item:hover {
+            background: #f5f5f5;
+        }
+        
+        .word-item.learned {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .word-item .word-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2196F3;
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            transition: width 0.3s ease;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .file-label {
+            background: #FF9800;
+        }
+        
+        .review-controls {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .review-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .correct {
+            background: #4CAF50;
+        }
+        
+        .incorrect {
+            background: #f44336;
+        }
+        
+        .writing-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .writing-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5em;
+            border: 2px solid #2196F3;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .writing-feedback {
+            font-size: 1.2em;
+            margin: 10px 0;
+            min-height: 30px;
+        }
+        
+        .correct-answer {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .incorrect-answer {
+            color: #f44336;
+        }
+        
+        .points-system {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .points-display {
+            font-size: 1.5em;
+            color: #d50000;
+            font-weight: bold;
+        }
+        
+        .motivation-message {
+            text-align: center;
+            font-style: italic;
+            margin: 15px 0;
+            color: #666;
+        }
+        
+        .special-message {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        /* 大弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 90%;
+            width: 500px;
+            max-height: 80%;
+            overflow-y: auto;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .modal-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+        
+        .modal-message {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .modal-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn.confirm {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .modal-btn.cancel {
+            background: #f44336;
+            color: white;
+        }
+        
+        .modal-btn.neutral {
+            background: #2196F3;
+            color: white;
+        }
+        
+        /* 管理员样式 */
+        .admin-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .user-table th, .user-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .user-table th {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .user-table tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+        
+        .user-table tr:hover {
+            background: #e9e9e9;
+        }
+        
+        .import-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            display: none;
+        }
+        
+        @media (max-width: 600px) {
+            .english-word {
+                font-size: 2em;
+            }
+            
+            button {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .user-info {
+                position: static;
+                transform: none;
+                text-align: center;
+                margin-top: 10px;
+            }
+            
+            .user-table {
+                font-size: 12px;
+            }
+            
+            .user-table th, .user-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 大弹窗 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">大大鼓励</div>
+            <div class="modal-message" id="modalMessage"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm" onclick="closeModal()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 登录页面 -->
+        <div id="loginPage" class="login-container">
+            <h1>📚 陪你背单词 <span class="heart">❤️</span></h1>
+            <p>专属学习空间，每天进步一点点！</p>
+            
+            <div class="login-form">
+                <input type="tel" class="login-input" id="phoneInput" placeholder="请输入手机号" maxlength="11">
+                <input type="text" class="login-input" id="nameInput" placeholder="请输入你的名字">
+                <button class="login-btn" onclick="login()">开始学习</button>
+            </div>
+            
+            <div class="motivation-message">
+                相信你是最棒的！每天坚持，英语一定会越来越好！
+            </div>
+        </div>
+
+        <!-- 主应用页面 -->
+        <div id="appPage" style="display: none;">
+            <div class="header">
+                <h1>📚 陪你背单词 <span class="heart">❤️</span></h1>
+                <p>专属学习空间，每天进步一点点！</p>
+                <div class="user-info">
+                    <span id="userGreeting">你好，俊泽！</span>
+                    <button class="logout-btn" onclick="logout()">退出</button>
+                    <button class="admin-btn" id="adminBtn" onclick="toggleAdminPanel()" style="display: none;">管理后台</button>
+                </div>
+            </div>
+            
+            <div class="points-system">
+                <div>当前积分：<span class="points-display" id="pointsDisplay">100</span> 分</div>
+                <div class="motivation-message" id="dailyMessage">今天也要加油哦！为你骄傲！</div>
+            </div>
+            
+            <!-- 管理员面板 -->
+            <div id="adminPanel" class="admin-panel">
+                <h2 style="text-align: center; margin-bottom: 20px;">👑 用户学习情况总览</h2>
+                
+                <div class="controls">
+                    <button onclick="refreshUserData()">🔄 刷新数据</button>
+                    <button onclick="exportUserData()">📊 导出数据</button>
+                    <button onclick="clearAllData()" style="background: #f44336;">🗑️ 清空数据</button>
+                    <button onclick="importFullVocabulary()" style="background: #9c27b0;">📚 导入完整词库</button>
+                </div>
+                
+                <div id="userStats">
+                    <!-- 用户数据将在这里显示 -->
+                </div>
+            </div>
+            
+            <!-- 词库信息 -->
+            <div class="import-info" id="wordLibraryInfo">
+                <strong>📚 当前词库信息：</strong>
+                <span id="libraryStats">共 0 个单词</span>
+                <button onclick="showImportDialog()" style="margin-left: 10px; background: #FF9800;">更换词库</button>
+            </div>
+            
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="switchTab('learn')">学习新单词</button>
+                <button class="tab-button" onclick="switchTab('review')">复习单词</button>
+                <button class="tab-button" onclick="switchTab('writing')">单词默写</button>
+                <button class="tab-button" onclick="switchTab('stats')">学习统计</button>
+            </div>
+            
+            <!-- 学习新单词标签页 -->
+            <div id="learn" class="tab-content active">
+                <div class="controls">
+                    <button onclick="selectTodayWords()">🔄 今日单词</button>
+                    <button onclick="speakWord()">🔊 发音</button>
+                    <button onclick="markLearned()">✅ 已学会</button>
+                    <button onclick="nextWord()">➡️ 下一个</button>
+                </div>
+                
+                <div class="progress" id="progress">
+                    今日进度: 0/0 (今日目标: 30个单词)
+                </div>
+                
+                <div class="word-card">
+                    <div class="book-icon">📖</div>
+                    <div class="english-word" onclick="toggleMeaning()" id="wordDisplay">
+                        点击"今日单词"开始学习
+                    </div>
+                    <div class="pronunciation" id="pronunciation"></div>
+                    <div class="part-of-speech" id="partOfSpeech"></div>
+                    <div class="meaning" id="meaning"></div>
+                </div>
+                
+                <div class="word-list" id="wordList">
+                    <!-- 单词列表将在这里显示 -->
+                </div>
+            </div>
+            
+            <!-- 复习单词标签页 -->
+            <div id="review" class="tab-content">
+                <div class="controls">
+                    <button onclick="startReview()">🔄 开始复习</button>
+                    <button onclick="speakWord()">🔊 发音</button>
+                </div>
+                
+                <div class="progress" id="reviewProgress">
+                    复习进度: 0/0 (今日目标: 20个单词)
+                </div>
+                
+                <div class="word-card">
+                    <div class="book-icon">📖</div>
+                    <div class="english-word" onclick="toggleReviewMeaning()" id="reviewWordDisplay">
+                        点击"开始复习"进行复习
+                    </div>
+                    <div class="pronunciation" id="reviewPronunciation"></div>
+                    <div class="part-of-speech" id="reviewPartOfSpeech"></div>
+                    <div class="meaning" id="reviewMeaning"></div>
+                </div>
+                
+                <div class="review-controls">
+                    <button class="review-btn incorrect" onclick="markIncorrect()">❌ 不熟悉</button>
+                    <button class="review-btn correct" onclick="markCorrect()">✅ 记住了</button>
+                </div>
+                
+                <div class="word-list" id="reviewWordList">
+                    <!-- 复习单词列表将在这里显示 -->
+                </div>
+            </div>
+            
+            <!-- 单词默写标签页 -->
+            <div id="writing" class="tab-content">
+                <div class="controls">
+                    <button onclick="startWriting()">🔄 开始默写</button>
+                    <button onclick="showHint()">💡 提示</button>
+                    <button onclick="nextWritingWord()">➡️ 下一个</button>
+                </div>
+                
+                <div class="progress" id="writingProgress">
+                    默写进度: 0/0 (今日目标: 20个单词)
+                </div>
+                
+                <div class="writing-container">
+                    <div class="word-card">
+                        <div class="book-icon">📖</div>
+                        <div class="part-of-speech" id="writingPartOfSpeech"></div>
+                        <div class="meaning" id="writingMeaning"></div>
+                        <div class="pronunciation" id="writingPronunciation"></div>
+                    </div>
+                    
+                    <input type="text" class="writing-input" id="writingInput" placeholder="请输入对应的英文单词">
+                    
+                    <button onclick="checkWriting()" style="padding: 15px 30px; font-size: 1.2em;">✅ 检查答案</button>
+                    
+                    <div class="writing-feedback" id="writingFeedback"></div>
+                </div>
+                
+                <div class="word-list" id="writingWordList">
+                    <!-- 默写单词列表将在这里显示 -->
+                </div>
+            </div>
+            
+            <!-- 学习统计标签页 -->
+            <div id="stats" class="tab-content">
+                <h2 style="text-align: center; margin-bottom: 20px;">📊 学习统计</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalWords">0</div>
+                        <div class="stat-label">总单词数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="learnedWords">0</div>
+                        <div class="stat-label">已学会</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="learningProgress">0%</div>
+                        <div class="stat-label">学习进度</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="reviewCount">0</div>
+                        <div class="stat-label">复习次数</div>
+                    </div>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <h3>总体进度</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="overallProgressBar" style="width: 0%"></div>
+                    </div>
+                    <div id="overallProgressText">0%</div>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <h3>今日任务完成情况</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="todayProgressBar" style="width: 0%"></div>
+                    </div>
+                    <div id="todayProgressText">今日进度: 0%</div>
+                    
+                    <div id="taskStatus" style="margin-top: 10px;"></div>
+                </div>
+                
+                <div class="special-message" id="specialMessage">
+                    相信你是最棒的！继续加油！📚
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <h3>学习记录</h3>
+                    <div id="learningHistory">
+                        <!-- 学习历史将在这里显示 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 用户数据和单词数据
+        let currentUser = null;
+        let allUsers = {};
+        let globalWordLibrary = []; // 全局词库
+        let allWords = [];
+        let todayWords = [];
+        let reviewWords = [];
+        let writingWords = [];
+        let currentWordIndex = 0;
+        let currentReviewIndex = 0;
+        let currentWritingIndex = 0;
+        let learningHistory = [];
+        let dailyTasks = {
+            learn: { target: 30, completed: 0, done: false },
+            review: { target: 20, completed: 0, done: false },
+            writing: { target: 20, completed: 0, done: false }
+        };
+        let today = new Date().toISOString().split('T')[0];
+
+        // 大弹窗功能
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        // 管理员手机号
+        const ADMIN_PHONE = '17797616493';
+
+        // 登录功能
+        function login() {
+            const phone = document.getElementById('phoneInput').value.trim();
+            const name = document.getElementById('nameInput').value.trim();
+            
+            if (!phone || !name) {
+                showModal('提示', '请输入手机号和名字哦！');
+                return;
+            }
+            
+            if (!/^1[3-9]\d{9}$/.test(phone)) {
+                showModal('提示', '请输入正确的手机号格式！');
+                return;
+            }
+            
+            // 加载用户数据和词库
+            loadUsers();
+            loadWordLibrary();
+            
+            // 创建或获取用户
+            if (!allUsers[phone]) {
+                allUsers[phone] = {
+                    name: name,
+                    phone: phone,
+                    points: 100,
+                    joinDate: today,
+                    words: JSON.parse(JSON.stringify(globalWordLibrary)),
+                    dailyTasks: JSON.parse(JSON.stringify(dailyTasks)),
+                    learningHistory: []
+                };
+            }
+            
+            currentUser = allUsers[phone];
+            
+            // 更新显示
+            document.getElementById('userGreeting').textContent = `你好，${currentUser.name}！`;
+            document.getElementById('pointsDisplay').textContent = currentUser.points;
+            
+            // 显示管理员按钮
+            if (phone === ADMIN_PHONE) {
+                document.getElementById('adminBtn').style.display = 'inline-block';
+                document.getElementById('wordLibraryInfo').style.display = 'block';
+                updateLibraryStats();
+            }
+            
+            // 切换到主应用
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('appPage').style.display = 'block';
+            
+            // 初始化单词数据
+            initWords();
+            
+            // 显示欢迎消息
+            let welcomeMsg = `${currentUser.name}，好想你呀！今天也要认真学习哦！`;
+            if (name === '俊泽') {
+                welcomeMsg = `俊泽宝贝，小姨来陪你背单词啦！今天也要像小勇士一样努力哦！`;
+            }
+            showModal('欢迎回来！', welcomeMsg);
+            
+            // 保存用户数据
+            saveUsers();
+        }
+
+        // 退出登录
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('appPage').style.display = 'none';
+            document.getElementById('phoneInput').value = '';
+            document.getElementById('nameInput').value = '';
+        }
+
+        // 加载用户数据
+        function loadUsers() {
+            const saved = localStorage.getItem('auntVocabularyUsers');
+            if (saved) {
+                allUsers = JSON.parse(saved);
+            }
+        }
+
+        // 保存用户数据
+        function saveUsers() {
+            if (currentUser) {
+                allUsers[currentUser.phone] = currentUser;
+            }
+            localStorage.setItem('auntVocabularyUsers', JSON.stringify(allUsers));
+        }
+
+        // 加载词库
+        // 加载词库
+function loadWordLibrary() {
+    const saved = localStorage.getItem('auntVocabularyLibrary');
+    if (saved) {
+        globalWordLibrary = JSON.parse(saved);
+    } else {
+        // 如果没有词库，使用完整词库
+        globalWordLibrary = parseFullWordDocument();
+        saveWordLibrary();
+    }
+}
+
+// 解析完整的小学1500词文档
+function parseFullWordDocument() {
+    const fullWordData = `
+a|/ə/|art.|一个
+able|/ˈeɪbl/|adj.|能够的
+about|/əˈbaʊt/|prep.|关于
+above|/əˈbʌv/|prep.|在...上面
+across|/əˈkrɒs/|prep.|横过
+act|/ækt/|v.|行动
+action|/ˈækʃn/|n.|行动
+add|/æd/|v.|加
+afraid|/əˈfreɪd/|adj.|害怕的
+after|/ˈɑːftə/|prep.|在...之后
+afternoon|/ˌɑːftəˈnuːn/|n.|下午
+again|/əˈɡen/|adv.|又
+against|/əˈɡenst/|prep.|反对
+age|/eɪdʒ/|n.|年龄
+ago|/əˈɡəʊ/|adv.|以前
+agree|/əˈɡriː/|v.|同意
+air|/eə/|n.|空气
+airport|/ˈeəpɔːt/|n.|机场
+all|/ɔːl/|adj.|所有的
+allow|/əˈlaʊ/|v.|允许
+almost|/ˈɔːlməʊst/|adv.|几乎
+alone|/əˈləʊn/|adj.|单独的
+along|/əˈlɒŋ/|prep.|沿着
+already|/ɔːlˈredi/|adv.|已经
+also|/ˈɔːlsəʊ/|adv.|也
+although|/ɔːlˈðəʊ/|conj.|虽然
+always|/ˈɔːlweɪz/|adv.|总是
+am|/æm/|v.|是
+America|/əˈmerɪkə/|n.|美国
+American|/əˈmerɪkən/|adj.|美国的
+among|/əˈmʌŋ/|prep.|在...之中
+an|/æn/|art.|一个
+and|/ænd/|conj.|和
+angry|/ˈæŋɡri/|adj.|生气的
+animal|/ˈænɪməl/|n.|动物
+another|/əˈnʌðə/|adj.|另一个的
+answer|/ˈɑːnsə/|v.|回答
+any|/ˈeni/|adj.|任何的
+anybody|/ˈenibɒdi/|pron.|任何人
+anything|/ˈeniθɪŋ/|pron.|任何事物
+apple|/ˈæpl/|n.|苹果
+April|/ˈeɪprəl/|n.|四月
+are|/ɑː/|v.|是
+area|/ˈeəriə/|n.|区域
+arm|/ɑːm/|n.|手臂
+around|/əˈraʊnd/|prep.|围绕
+arrive|/əˈraɪv/|v.|到达
+art|/ɑːt/|n.|艺术
+as|/æz/|conj.|如同
+ask|/ɑːsk/|v.|问
+at|/æt/|prep.|在
+August|/ˈɔːɡəst/|n.|八月
+aunt|/ɑːnt/|n.|阿姨
+autumn|/ˈɔːtəm/|n.|秋天
+away|/əˈweɪ/|adv.|离开
+baby|/ˈbeɪbi/|n.|婴儿
+back|/bæk/|n.|背部
+bad|/bæd/|adj.|坏的
+bag|/bæɡ/|n.|包
+ball|/bɔːl/|n.|球
+banana|/bəˈnɑːnə/|n.|香蕉
+bank|/bæŋk/|n.|银行
+basketball|/ˈbɑːskɪtbɔːl/|n.|篮球
+bathroom|/ˈbɑːθruːm/|n.|浴室
+be|/biː/|v.|是
+beach|/biːtʃ/|n.|海滩
+bear|/beə/|n.|熊
+beautiful|/ˈbjuːtɪfl/|adj.|美丽的
+because|/bɪˈkɒz/|conj.|因为
+become|/bɪˈkʌm/|v.|成为
+bed|/bed/|n.|床
+bedroom|/ˈbedruːm/|n.|卧室
+been|/biːn/|v.|是(be的过去分词)
+before|/bɪˈfɔː/|prep.|在...之前
+begin|/bɪˈɡɪn/|v.|开始
+behind|/bɪˈhaɪnd/|prep.|在...后面
+believe|/bɪˈliːv/|v.|相信
+bell|/bel/|n.|铃
+below|/bɪˈləʊ/|prep.|在...下面
+beside|/bɪˈsaɪd/|prep.|在...旁边
+best|/best/|adj.|最好的
+better|/ˈbetə/|adj.|更好的
+between|/bɪˈtwiːn/|prep.|在...之间
+big|/bɪɡ/|adj.|大的
+bike|/baɪk/|n.|自行车
+bird|/bɜːd/|n.|鸟
+birthday|/ˈbɜːθdeɪ/|n.|生日
+bit|/bɪt/|n.|一点
+black|/blæk/|adj.|黑色的
+blackboard|/ˈblækbɔːd/|n.|黑板
+blue|/bluː/|adj.|蓝色的
+boat|/bəʊt/|n.|船
+body|/ˈbɒdi/|n.|身体
+book|/bʊk/|n.|书
+boring|/ˈbɔːrɪŋ/|adj.|无聊的
+born|/bɔːn/|v.|出生
+both|/bəʊθ/|adj.|两者的
+bottle|/ˈbɒtl/|n.|瓶子
+box|/bɒks/|n.|盒子
+boy|/bɔɪ/|n.|男孩
+bread|/bred/|n.|面包
+break|/breɪk/|v.|打破
+breakfast|/ˈbrekfəst/|n.|早餐
+bridge|/brɪdʒ/|n.|桥
+bright|/braɪt/|adj.|明亮的
+bring|/brɪŋ/|v.|带来
+brother|/ˈbrʌðə/|n.|兄弟
+brown|/braʊn/|adj.|棕色的
+build|/bɪld/|v.|建造
+building|/ˈbɪldɪŋ/|n.|建筑物
+bus|/bʌs/|n.|公交车
+business|/ˈbɪznəs/|n.|商业
+busy|/ˈbɪzi/|adj.|忙碌的
+but|/bʌt/|conj.|但是
+buy|/baɪ/|v.|买
+by|/baɪ/|prep.|通过
+cake|/keɪk/|n.|蛋糕
+call|/kɔːl/|v.|打电话
+camera|/ˈkæmərə/|n.|相机
+can|/kæn/|v.|能
+candy|/ˈkændi/|n.|糖果
+cap|/kæp/|n.|帽子
+car|/kɑː/|n.|汽车
+card|/kɑːd/|n.|卡片
+care|/keə/|v.|关心
+careful|/ˈkeəfl/|adj.|小心的
+carry|/ˈkæri/|v.|携带
+cat|/kæt/|n.|猫
+catch|/kætʃ/|v.|抓住
+center|/ˈsentə/|n.|中心
+chair|/tʃeə/|n.|椅子
+chalk|/tʃɔːk/|n.|粉笔
+chance|/tʃɑːns/|n.|机会
+change|/tʃeɪndʒ/|v.|改变
+cheap|/tʃiːp/|adj.|便宜的
+check|/tʃek/|v.|检查
+cheese|/tʃiːz/|n.|奶酪
+chicken|/ˈtʃɪkɪn/|n.|鸡肉
+child|/tʃaɪld/|n.|孩子
+children|/ˈtʃɪldrən/|n.|孩子们
+China|/ˈtʃaɪnə/|n.|中国
+Chinese|/ˌtʃaɪˈniːz/|adj.|中国的
+chocolate|/ˈtʃɒklət/|n.|巧克力
+choose|/tʃuːz/|v.|选择
+Christmas|/ˈkrɪsməs/|n.|圣诞节
+cinema|/ˈsɪnəmə/|n.|电影院
+city|/ˈsɪti/|n.|城市
+class|/klɑːs/|n.|班级
+classroom|/ˈklɑːsruːm/|n.|教室
+clean|/kliːn/|adj.|干净的
+clear|/klɪə/|adj.|清晰的
+clever|/ˈklevə/|adj.|聪明的
+climb|/klaɪm/|v.|爬
+clock|/klɒk/|n.|时钟
+close|/kləʊz/|v.|关闭
+clothes|/kləʊðz/|n.|衣服
+cloud|/klaʊd/|n.|云
+cloudy|/ˈklaʊdi/|adj.|多云的
+coat|/kəʊt/|n.|外套
+coffee|/ˈkɒfi/|n.|咖啡
+cold|/kəʊld/|adj.|冷的
+collect|/kəˈlekt/|v.|收集
+color|/ˈkʌlə/|n.|颜色
+come|/kʌm/|v.|来
+comfortable|/ˈkʌmftəbl/|adj.|舒适的
+common|/ˈkɒmən/|adj.|普通的
+computer|/kəmˈpjuːtə/|n.|电脑
+concert|/ˈkɒnsət/|n.|音乐会
+cook|/kʊk/|v.|烹饪
+cool|/kuːl/|adj.|凉爽的
+copy|/ˈkɒpi/|v.|复制
+corner|/ˈkɔːnə/|n.|角落
+cost|/kɒst/|v.|花费
+could|/kʊd/|v.|能(can的过去式)
+count|/kaʊnt/|v.|数数
+country|/ˈkʌntri/|n.|国家
+course|/kɔːs/|n.|课程
+cousin|/ˈkʌzn/|n.|堂兄弟
+cover|/ˈkʌvə/|v.|覆盖
+cow|/kaʊ/|n.|奶牛
+cream|/kriːm/|n.|奶油
+cross|/krɒs/|v.|穿过
+cry|/kraɪ/|v.|哭
+cup|/kʌp/|n.|杯子
+cut|/kʌt/|v.|切
+dance|/dɑːns/|v.|跳舞
+dangerous|/ˈdeɪndʒərəs/|adj.|危险的
+dark|/dɑːk/|adj.|黑暗的
+date|/deɪt/|n.|日期
+daughter|/ˈdɔːtə/|n.|女儿
+day|/deɪ/|n.|天
+dead|/ded/|adj.|死的
+dear|/dɪə/|adj.|亲爱的
+December|/dɪˈsembə/|n.|十二月
+decide|/dɪˈsaɪd/|v.|决定
+deep|/diːp/|adj.|深的
+desk|/desk/|n.|书桌
+develop|/dɪˈveləp/|v.|发展
+dialog|/ˈdaɪəlɒɡ/|n.|对话
+dictionary|/ˈdɪkʃənri/|n.|字典
+die|/daɪ/|v.|死
+different|/ˈdɪfrənt/|adj.|不同的
+difficult|/ˈdɪfɪkəlt/|adj.|困难的
+dig|/dɪɡ/|v.|挖
+dinner|/ˈdɪnə/|n.|晚餐
+dirty|/ˈdɜːti/|adj.|脏的
+do|/duː/|v.|做
+doctor|/ˈdɒktə/|n.|医生
+dog|/dɒɡ/|n.|狗
+doll|/dɒl/|n.|洋娃娃
+dollar|/ˈdɒlə/|n.|美元
+door|/dɔː/|n.|门
+double|/ˈdʌbl/|adj.|双倍的
+down|/daʊn/|adv.|向下
+draw|/drɔː/|v.|画
+dream|/driːm/|n.|梦想
+dress|/dres/|n.|连衣裙
+drink|/drɪŋk/|v.|喝
+drive|/draɪv/|v.|驾驶
+driver|/ˈdraɪvə/|n.|司机
+drop|/drɒp/|v.|掉落
+dry|/draɪ/|adj.|干的
+duck|/dʌk/|n.|鸭子
+during|/ˈdjʊərɪŋ/|prep.|在...期间
+each|/iːtʃ/|adj.|每个的
+ear|/ɪə/|n.|耳朵
+early|/ˈɜːli/|adj.|早的
+earth|/ɜːθ/|n.|地球
+east|/iːst/|n.|东方
+easy|/ˈiːzi/|adj.|容易的
+eat|/iːt/|v.|吃
+egg|/eɡ/|n.|鸡蛋
+eight|/eɪt/|num.|八
+eighteen|/ˌeɪˈtiːn/|num.|十八
+eighth|/eɪtθ/|num.|第八
+eighty|/ˈeɪti/|num.|八十
+either|/ˈaɪðə/|adv.|也(用于否定句)
+elephant|/ˈelɪfənt/|n.|大象
+eleven|/ɪˈlevn/|num.|十一
+else|/els/|adv.|其他
+empty|/ˈempti/|adj.|空的
+end|/end/|n.|结束
+enemy|/ˈenəmi/|n.|敌人
+energy|/ˈenədʒi/|n.|能量
+engineer|/ˌendʒɪˈnɪə/|n.|工程师
+English|/ˈɪŋɡlɪʃ/|n.|英语
+enjoy|/ɪnˈdʒɔɪ/|v.|享受
+enough|/ɪˈnʌf/|adj.|足够的
+enter|/ˈentə/|v.|进入
+environment|/ɪnˈvaɪrənmənt/|n.|环境
+eraser|/ɪˈreɪzə/|n.|橡皮
+even|/ˈiːvn/|adv.|甚至
+evening|/ˈiːvnɪŋ/|n.|晚上
+event|/ɪˈvent/|n.|事件
+ever|/ˈevə/|adv.|曾经
+every|/ˈevri/|adj.|每一个的
+everybody|/ˈevribɒdi/|pron.|每个人
+everyone|/ˈevriwʌn/|pron.|每个人
+everything|/ˈevriθɪŋ/|pron.|每件事物
+everywhere|/ˈevriweə/|adv.|到处
+exam|/ɪɡˈzæm/|n.|考试
+example|/ɪɡˈzɑːmpl/|n.|例子
+excellent|/ˈeksələnt/|adj.|优秀的
+except|/ɪkˈsept/|prep.|除了
+excuse|/ɪkˈskjuːz/|v.|原谅
+exercise|/ˈeksəsaɪz/|n.|练习
+expect|/ɪkˈspekt/|v.|期望
+expensive|/ɪkˈspensɪv/|adj.|昂贵的
+experience|/ɪkˈspɪəriəns/|n.|经验
+explain|/ɪkˈspleɪn/|v.|解释
+eye|/aɪ/|n.|眼睛
+face|/feɪs/|n.|脸
+fact|/fækt/|n.|事实
+factory|/ˈfæktri/|n.|工厂
+fail|/feɪl/|v.|失败
+fall|/fɔːl/|v.|落下
+family|/ˈfæməli/|n.|家庭
+famous|/ˈfeɪməs/|adj.|著名的
+fan|/fæn/|n.|风扇
+far|/fɑː/|adj.|远的
+farm|/fɑːm/|n.|农场
+farmer|/ˈfɑːmə/|n.|农民
+fast|/fɑːst/|adj.|快的
+fat|/fæt/|adj.|胖的
+father|/ˈfɑːðə/|n.|父亲
+favorite|/ˈfeɪvərɪt/|adj.|最喜欢的
+February|/ˈfebruəri/|n.|二月
+feed|/fiːd/|v.|喂养
+feel|/fiːl/|v.|感觉
+festival|/ˈfestɪvl/|n.|节日
+few|/fjuː/|adj.|很少的
+field|/fiːld/|n.|田野
+fifteen|/ˌfɪfˈtiːn/|num.|十五
+fifth|/fɪfθ/|num.|第五
+fifty|/ˈfɪfti/|num.|五十
+fight|/faɪt/|v.|打架
+fill|/fɪl/|v.|填满
+film|/fɪlm/|n.|电影
+final|/ˈfaɪnl/|adj.|最终的
+find|/faɪnd/|v.|找到
+fine|/faɪn/|adj.|好的
+finger|/ˈfɪŋɡə/|n.|手指
+finish|/ˈfɪnɪʃ/|v.|完成
+fire|/ˈfaɪə/|n.|火
+first|/fɜːst/|num.|第一
+fish|/fɪʃ/|n.|鱼
+fit|/fɪt/|v.|适合
+five|/faɪv/|num.|五
+fix|/fɪks/|v.|修理
+flag|/flæɡ/|n.|旗帜
+floor|/flɔː/|n.|地板
+flower|/ˈflaʊə/|n.|花
+fly|/flaɪ/|v.|飞
+follow|/ˈfɒləʊ/|v.|跟随
+food|/fuːd/|n.|食物
+foot|/fʊt/|n.|脚
+football|/ˈfʊtbɔːl/|n.|足球
+for|/fɔː/|prep.|为了
+foreign|/ˈfɒrən/|adj.|外国的
+forest|/ˈfɒrɪst/|n.|森林
+forget|/fəˈɡet/|v.|忘记
+fork|/fɔːk/|n.|叉子
+form|/fɔːm/|n.|形式
+forty|/ˈfɔːti/|num.|四十
+forward|/ˈfɔːwəd/|adv.|向前
+four|/fɔː/|num.|四
+fourteen|/ˌfɔːˈtiːn/|num.|十四
+fourth|/fɔːθ/|num.|第四
+free|/friː/|adj.|免费的
+fresh|/freʃ/|adj.|新鲜的
+Friday|/ˈfraɪdeɪ/|n.|星期五
+fridge|/frɪdʒ/|n.|冰箱
+friend|/frend/|n.|朋友
+friendly|/ˈfrendli/|adj.|友好的
+from|/frɒm/|prep.|从
+front|/frʌnt/|n.|前面
+fruit|/fruːt/|n.|水果
+full|/fʊl/|adj.|满的
+fun|/fʌn/|n.|乐趣
+funny|/ˈfʌni/|adj.|有趣的
+future|/ˈfjuːtʃə/|n.|未来
+game|/ɡeɪm/|n.|游戏
+garden|/ˈɡɑːdn/|n.|花园
+gate|/ɡeɪt/|n.|大门
+get|/ɡet/|v.|得到
+girl|/ɡɜːl/|n.|女孩
+give|/ɡɪv/|v.|给
+glad|/ɡlæd/|adj.|高兴的
+glass|/ɡlɑːs/|n.|玻璃
+go|/ɡəʊ/|v.|去
+goal|/ɡəʊl/|n.|目标
+god|/ɡɒd/|n.|上帝
+gold|/ɡəʊld/|n.|黄金
+good|/ɡʊd/|adj.|好的
+goodbye|/ˌɡʊdˈbaɪ/|int.|再见
+grade|/ɡreɪd/|n.|年级
+grandfather|/ˈɡrænfɑːðə/|n.|祖父
+grandmother|/ˈɡrænmʌðə/|n.|祖母
+grass|/ɡrɑːs/|n.|草
+great|/ɡreɪt/|adj.|伟大的
+green|/ɡriːn/|adj.|绿色的
+ground|/ɡraʊnd/|n.|地面
+group|/ɡruːp/|n.|组
+grow|/ɡrəʊ/|v.|生长
+guess|/ɡes/|v.|猜测
+guest|/ɡest/|n.|客人
+guide|/ɡaɪd/|n.|指南
+gun|/ɡʌn/|n.|枪
+hair|/heə/|n.|头发
+half|/hɑːf/|n.|一半
+hall|/hɔːl/|n.|大厅
+hand|/hænd/|n.|手
+happy|/ˈhæpi/|adj.|快乐的
+hard|/hɑːd/|adj.|困难的
+hat|/hæt/|n.|帽子
+hate|/heɪt/|v.|讨厌
+have|/hæv/|v.|有
+he|/hiː/|pron.|他
+head|/hed/|n.|头
+health|/helθ/|n.|健康
+hear|/hɪə/|v.|听见
+heart|/hɑːt/|n.|心脏
+heavy|/ˈhevi/|adj.|重的
+hello|/həˈləʊ/|int.|你好
+help|/help/|v.|帮助
+her|/hɜː/|pron.|她的
+here|/hɪə/|adv.|这里
+hers|/hɜːz/|pron.|她的
+herself|/hɜːˈself/|pron.|她自己
+hi|/haɪ/|int.|嗨
+hide|/haɪd/|v.|隐藏
+high|/haɪ/|adj.|高的
+hill|/hɪl/|n.|小山
+him|/hɪm/|pron.|他
+himself|/hɪmˈself/|pron.|他自己
+his|/hɪz/|pron.|他的
+history|/ˈhɪstri/|n.|历史
+hit|/hɪt/|v.|打
+hobby|/ˈhɒbi/|n.|爱好
+hold|/həʊld/|v.|持有
+hole|/həʊl/|n.|洞
+holiday|/ˈhɒlədeɪ/|n.|假期
+home|/həʊm/|n.|家
+homework|/ˈhəʊmwɜːk/|n.|家庭作业
+honest|/ˈɒnɪst/|adj.|诚实的
+hope|/həʊp/|v.|希望
+horse|/hɔːs/|n.|马
+hospital|/ˈhɒspɪtl/|n.|医院
+hot|/hɒt/|adj.|热的
+hotel|/həʊˈtel/|n.|酒店
+hour|/ˈaʊə/|n.|小时
+house|/haʊs/|n.|房子
+how|/haʊ/|adv.|如何
+hundred|/ˈhʌndrəd/|num.|百
+hungry|/ˈhʌŋɡri/|adj.|饥饿的
+hurry|/ˈhʌri/|v.|匆忙
+hurt|/hɜːt/|v.|伤害
+husband|/ˈhʌzbənd/|n.|丈夫
+I|/aɪ/|pron.|我
+ice|/aɪs/|n.|冰
+idea|/aɪˈdɪə/|n.|想法
+if|/ɪf/|conj.|如果
+ill|/ɪl/|adj.|生病的
+important|/ɪmˈpɔːtnt/|adj.|重要的
+in|/ɪn/|prep.|在...里面
+information|/ˌɪnfəˈmeɪʃn/|n.|信息
+ink|/ɪŋk/|n.|墨水
+inside|/ˌɪnˈsaɪd/|prep.|在...里面
+instead|/ɪnˈsted/|adv.|代替
+interest|/ˈɪntrəst/|n.|兴趣
+interesting|/ˈɪntrəstɪŋ/|adj.|有趣的
+into|/ˈɪntə/|prep.|进入
+introduce|/ˌɪntrəˈdjuːs/|v.|介绍
+invent|/ɪnˈvent/|v.|发明
+invite|/ɪnˈvaɪt/|v.|邀请
+is|/ɪz/|v.|是
+island|/ˈaɪlənd/|n.|岛屿
+it|/ɪt/|pron.|它
+its|/ɪts/|pron.|它的
+itself|/ɪtˈself/|pron.|它自己
+jacket|/ˈdʒækɪt/|n.|夹克
+January|/ˈdʒænjuəri/|n.|一月
+job|/dʒɒb/|n.|工作
+join|/dʒɔɪn/|v.|加入
+joke|/dʒəʊk/|n.|笑话
+journey|/ˈdʒɜːni/|n.|旅程
+joy|/dʒɔɪ/|n.|快乐
+July|/dʒuˈlaɪ/|n.|七月
+jump|/dʒʌmp/|v.|跳
+June|/dʒuːn/|n.|六月
+just|/dʒʌst/|adv.|刚刚
+keep|/kiːp/|v.|保持
+key|/kiː/|n.|钥匙
+kill|/kɪl/|v.|杀死
+kind|/kaɪnd/|adj.|友好的
+king|/kɪŋ/|n.|国王
+kiss|/kɪs/|v.|亲吻
+kitchen|/ˈkɪtʃɪn/|n.|厨房
+kite|/kaɪt/|n.|风筝
+knee|/niː/|n.|膝盖
+knife|/naɪf/|n.|刀
+knock|/nɒk/|v.|敲
+know|/nəʊ/|v.|知道
+lady|/ˈleɪdi/|n.|女士
+lake|/leɪk/|n.|湖
+lamp|/læmp/|n.|灯
+land|/lænd/|n.|土地
+language|/ˈlæŋɡwɪdʒ/|n.|语言
+large|/lɑːdʒ/|adj.|大的
+last|/lɑːst/|adj.|最后的
+late|/leɪt/|adj.|迟到的
+laugh|/lɑːf/|v.|笑
+law|/lɔː/|n.|法律
+lay|/leɪ/|v.|放置
+lazy|/ˈleɪzi/|adj.|懒惰的
+lead|/liːd/|v.|领导
+leaf|/liːf/|n.|叶子
+learn|/lɜːn/|v.|学习
+least|/liːst/|adj.|最少的
+leave|/liːv/|v.|离开
+left|/left/|adj.|左边的
+leg|/leɡ/|n.|腿
+lend|/lend/|v.|借出
+length|/leŋθ/|n.|长度
+less|/les/|adj.|较少的
+lesson|/ˈlesn/|n.|课程
+let|/let/|v.|让
+letter|/ˈletə/|n.|信
+level|/ˈlevl/|n.|水平
+library|/ˈlaɪbrəri/|n.|图书馆
+lie|/laɪ/|v.|躺
+life|/laɪf/|n.|生活
+lift|/lɪft/|v.|举起
+light|/laɪt/|n.|光
+like|/laɪk/|v.|喜欢
+line|/laɪn/|n.|线
+lion|/ˈlaɪən/|n.|狮子
+lip|/lɪp/|n.|嘴唇
+list|/lɪst/|n.|列表
+listen|/ˈlɪsn/|v.|听
+little|/ˈlɪtl/|adj.|小的
+live|/lɪv/|v.|居住
+lock|/lɒk/|v.|锁
+London|/ˈlʌndən/|n.|伦敦
+long|/lɒŋ/|adj.|长的
+look|/lʊk/|v.|看
+lose|/luːz/|v.|失去
+lot|/lɒt/|n.|很多
+loud|/laʊd/|adj.|大声的
+love|/lʌv/|v.|爱
+low|/ləʊ/|adj.|低的
+luck|/lʌk/|n.|运气
+lunch|/lʌntʃ/|n.|午餐
+machine|/məˈʃiːn/|n.|机器
+mad|/mæd/|adj.|疯狂的
+magazine|/ˌmæɡəˈziːn/|n.|杂志
+mail|/meɪl/|n.|邮件
+make|/meɪk/|v.|制作
+man|/mæn/|n.|男人
+many|/ˈmeni/|adj.|许多的
+map|/mæp/|n.|地图
+March|/mɑːtʃ/|n.|三月
+mark|/mɑːk/|n.|标记
+market|/ˈmɑːkɪt/|n.|市场
+marry|/ˈmæri/|v.|结婚
+match|/mætʃ/|n.|比赛
+math|/mæθ/|n.|数学
+matter|/ˈmætə/|n.|事情
+May|/meɪ/|n.|五月
+may|/meɪ/|v.|可以
+maybe|/ˈmeɪbi/|adv.|也许
+me|/miː/|pron.|我
+meal|/miːl/|n.|餐
+mean|/miːn/|v.|意思是
+meaning|/ˈmiːnɪŋ/|n.|意义
+meat|/miːt/|n.|肉
+medicine|/ˈmedsn/|n.|药
+meet|/miːt/|v.|遇见
+member|/ˈmembə/|n.|成员
+memory|/ˈmeməri/|n.|记忆
+mend|/mend/|v.|修理
+mention|/ˈmenʃn/|v.|提到
+menu|/ˈmenjuː/|n.|菜单
+message|/ˈmesɪdʒ/|n.|消息
+metal|/ˈmetl/|n.|金属
+middle|/ˈmɪdl/|n.|中间
+might|/maɪt/|v.|可能
+mile|/maɪl/|n.|英里
+milk|/mɪlk/|n.|牛奶
+million|/ˈmɪljən/|num.|百万
+mind|/maɪnd/|n.|思想
+minute|/ˈmɪnɪt/|n.|分钟
+mirror|/ˈmɪrə/|n.|镜子
+Miss|/mɪs/|n.|小姐
+miss|/mɪs/|v.|想念
+mistake|/mɪˈsteɪk/|n.|错误
+model|/ˈmɒdl/|n.|模型
+modern|/ˈmɒdn/|adj.|现代的
+moment|/ˈməʊmənt/|n.|时刻
+Monday|/ˈmʌndeɪ/|n.|星期一
+money|/ˈmʌni/|n.|钱
+monkey|/ˈmʌŋki/|n.|猴子
+month|/mʌnθ/|n.|月份
+moon|/muːn/|n.|月亮
+more|/mɔː/|adj.|更多的
+morning|/ˈmɔːnɪŋ/|n.|早晨
+most|/məʊst/|adj.|最多的
+mother|/ˈmʌðə/|n.|母亲
+motor|/ˈməʊtə/|n.|马达
+mountain|/ˈmaʊntən/|n.|山
+mouse|/maʊs/|n.|老鼠
+mouth|/maʊθ/|n.|嘴巴
+move|/muːv/|v.|移动
+movie|/ˈmuːvi/|n.|电影
+Mr.|/ˈmɪstə/|n.|先生
+Mrs.|/ˈmɪsɪz/|n.|夫人
+much|/mʌtʃ/|adj.|许多的
+music|/ˈmjuːzɪk/|n.|音乐
+must|/mʌst/|v.|必须
+my|/maɪ/|pron.|我的
+myself|/maɪˈself/|pron.|我自己
+name|/neɪm/|n.|名字
+narrow|/ˈnærəʊ/|adj.|狭窄的
+nation|/ˈneɪʃn/|n.|国家
+nature|/ˈneɪtʃə/|n.|自然
+near|/nɪə/|prep.|靠近
+nearly|/ˈnɪəli/|adv.|几乎
+neat|/niːt/|adj.|整洁的
+necessary|/ˈnesəsəri/|adj.|必要的
+neck|/nek/|n.|脖子
+need|/niːd/|v.|需要
+neighbor|/ˈneɪbə/|n.|邻居
+neither|/ˈnaɪðə/|adj.|两者都不的
+nervous|/ˈnɜːvəs/|adj.|紧张的
+never|/ˈnevə/|adv.|从不
+new|/njuː/|adj.|新的
+news|/njuːz/|n.|新闻
+newspaper|/ˈnjuːzpeɪpə/|n.|报纸
+next|/nekst/|adj.|下一个的
+nice|/naɪs/|adj.|好的
+night|/naɪt/|n.|夜晚
+nine|/naɪn/|num.|九
+nineteen|/ˌnaɪnˈtiːn/|num.|十九
+ninety|/ˈnaɪnti/|num.|九十
+ninth|/naɪnθ/|num.|第九
+no|/nəʊ/|adv.|不
+nobody|/ˈnəʊbədi/|pron.|没有人
+noise|/nɔɪz/|n.|噪音
+none|/nʌn/|pron.|没有人
+noon|/nuːn/|n.|中午
+nor|/nɔː/|conj.|也不
+north|/nɔːθ/|n.|北方
+nose|/nəʊz/|n.|鼻子
+not|/nɒt/|adv.|不
+note|/nəʊt/|n.|笔记
+nothing|/ˈnʌθɪŋ/|pron.|没有什么
+notice|/ˈnəʊtɪs/|v.|注意
+November|/nəʊˈvembə/|n.|十一月
+now|/naʊ/|adv.|现在
+number|/ˈnʌmbə/|n.|数字
+nurse|/nɜːs/|n.|护士
+object|/ˈɒbdʒɪkt/|n.|物体
+ocean|/ˈəʊʃn/|n.|海洋
+o'clock|/əˈklɒk/|adv.|...点钟
+October|/ɒkˈtəʊbə/|n.|十月
+of|/əv/|prep.|...的
+off|/ɒf/|adv.|离开
+offer|/ˈɒfə/|v.|提供
+office|/ˈɒfɪs/|n.|办公室
+officer|/ˈɒfɪsə/|n.|军官
+often|/ˈɒfn/|adv.|经常
+oh|/əʊ/|int.|哦
+oil|/ɔɪl/|n.|油
+OK|/əʊˈkeɪ/|adj.|好的
+old|/əʊld/|adj.|老的
+on|/ɒn/|prep.|在...上面
+once|/wʌns/|adv.|一次
+one|/wʌn/|num.|一
+only|/ˈəʊnli/|adv.|仅仅
+open|/ˈəʊpən/|v.|打开
+or|/ɔː/|conj.|或者
+orange|/ˈɒrɪndʒ/|n.|橙子
+order|/ˈɔːdə/|n.|顺序
+other|/ˈʌðə/|adj.|其他的
+our|/ˈaʊə/|pron.|我们的
+ours|/aʊəz/|pron.|我们的
+ourselves|/ˌaʊəˈselvz/|pron.|我们自己
+out|/aʊt/|adv.|外面
+outside|/ˌaʊtˈsaɪd/|prep.|在...外面
+over|/ˈəʊvə/|prep.|在...上面
+own|/əʊn/|adj.|自己的
+page|/peɪdʒ/|n.|页
+pain|/peɪn/|n.|疼痛
+paint|/peɪnt/|v.|绘画
+pair|/peə/|n.|一对
+palace|/ˈpæləs/|n.|宫殿
+pale|/peɪl/|adj.|苍白的
+paper|/ˈpeɪpə/|n.|纸
+pardon|/ˈpɑːdn/|v.|原谅
+parent|/ˈpeərənt/|n.|父母
+park|/pɑːk/|n.|公园
+part|/pɑːt/|n.|部分
+party|/ˈpɑːti/|n.|派对
+pass|/pɑːs/|v.|通过
+past|/pɑːst/|prep.|经过
+path|/pɑːθ/|n.|小路
+pay|/peɪ/|v.|支付
+peace|/piːs/|n.|和平
+pen|/pen/|n.|钢笔
+pencil|/ˈpensl/|n.|铅笔
+people|/ˈpiːpl/|n.|人们
+perfect|/ˈpɜːfɪkt/|adj.|完美的
+perhaps|/pəˈhæps/|adv.|也许
+person|/ˈpɜːsn/|n.|人
+pet|/pet/|n.|宠物
+phone|/fəʊn/|n.|电话
+photo|/ˈfəʊtəʊ/|n.|照片
+piano|/piˈænəʊ/|n.|钢琴
+pick|/pɪk/|v.|挑选
+picture|/ˈpɪktʃə/|n.|图片
+piece|/piːs/|n.|片
+pig|/pɪɡ/|n.|猪
+pilot|/ˈpaɪlət/|n.|飞行员
+pink|/pɪŋk/|adj.|粉色的
+pioneer|/ˌpaɪəˈnɪə/|n.|先锋
+place|/pleɪs/|n.|地方
+plan|/plæn/|n.|计划
+plane|/pleɪn/|n.|飞机
+plant|/plɑːnt/|n.|植物
+plate|/pleɪt/|n.|盘子
+play|/pleɪ/|v.|玩
+player|/ˈpleɪə/|n.|玩家
+playground|/ˈpleɪɡraʊnd/|n.|操场
+pleasant|/ˈpleznt/|adj.|令人愉快的
+please|/pliːz/|v.|请
+pleasure|/ˈpleʒə/|n.|愉快
+pocket|/ˈpɒkɪt/|n.|口袋
+point|/pɔɪnt/|v.|指向
+police|/pəˈliːs/|n.|警察
+policeman|/pəˈliːsmən/|n.|警察
+polite|/pəˈlaɪt/|adj.|有礼貌的
+pool|/puːl/|n.|水池
+poor|/pɔː/|adj.|贫穷的
+popular|/ˈpɒpjələ/|adj.|流行的
+pork|/pɔːk/|n.|猪肉
+possible|/ˈpɒsəbl/|adj.|可能的
+post|/pəʊst/|n.|邮政
+potato|/pəˈteɪtəʊ/|n.|土豆
+pound|/paʊnd/|n.|英镑
+practice|/ˈpræktɪs/|n.|练习
+prepare|/prɪˈpeə/|v.|准备
+present|/ˈpreznt/|n.|礼物
+pretty|/ˈprɪti/|adj.|漂亮的
+price|/praɪs/|n.|价格
+prison|/ˈprɪzn/|n.|监狱
+probably|/ˈprɒbəbli/|adv.|可能
+problem|/ˈprɒbləm/|n.|问题
+produce|/prəˈdjuːs/|v.|生产
+program|/ˈprəʊɡræm/|n.|节目
+promise|/ˈprɒmɪs/|v.|承诺
+proud|/praʊd/|adj.|骄傲的
+public|/ˈpʌblɪk/|adj.|公共的
+pull|/pʊl/|v.|拉
+pupil|/ˈpjuːpl/|n.|学生
+purple|/ˈpɜːpl/|adj.|紫色的
+push|/pʊʃ/|v.|推
+put|/pʊt/|v.|放
+quarter|/ˈkwɔːtə/|n.|四分之一
+queen|/kwiːn/|n.|女王
+question|/ˈkwestʃən/|n.|问题
+quick|/kwɪk/|adj.|快的
+quiet|/ˈkwaɪət/|adj.|安静的
+quite|/kwaɪt/|adv.|相当
+rabbit|/ˈræbɪt/|n.|兔子
+race|/reɪs/|n.|比赛
+radio|/ˈreɪdiəʊ/|n.|收音机
+railway|/ˈreɪlweɪ/|n.|铁路
+rain|/reɪn/|n.|雨
+rainy|/ˈreɪni/|adj.|下雨的
+raise|/reɪz/|v.|提高
+rather|/ˈrɑːðə/|adv.|相当
+reach|/riːtʃ/|v.|到达
+read|/riːd/|v.|阅读
+ready|/ˈredi/|adj.|准备好的
+real|/rɪəl/|adj.|真实的
+really|/ˈrɪəli/|adv.|真正地
+reason|/ˈriːzn/|n.|原因
+receive|/rɪˈsiːv/|v.|收到
+record|/ˈrekɔːd/|n.|记录
+red|/red/|adj.|红色的
+remember|/rɪˈmembə/|v.|记住
+repair|/rɪˈpeə/|v.|修理
+repeat|/rɪˈpiːt/|v.|重复
+reply|/rɪˈplaɪ/|v.|回复
+report|/rɪˈpɔːt/|n.|报告
+rest|/rest/|n.|休息
+restaurant|/ˈrestrɒnt/|n.|餐厅
+result|/rɪˈzʌlt/|n.|结果
+return|/rɪˈtɜːn/|v.|返回
+rice|/raɪs/|n.|米饭
+rich|/rɪtʃ/|adj.|富有的
+ride|/raɪd/|v.|骑
+right|/raɪt/|adj.|正确的
+ring|/rɪŋ/|n.|戒指
+rise|/raɪz/|v.|上升
+river|/ˈrɪvə/|n.|河流
+road|/rəʊd/|n.|道路
+robot|/ˈrəʊbɒt/|n.|机器人
+rock|/rɒk/|n.|岩石
+room|/ruːm/|n.|房间
+round|/raʊnd/|adj.|圆的
+row|/rəʊ/|n.|排
+ruler|/ˈruːlə/|n.|尺子
+run|/rʌn/|v.|跑
+sad|/sæd/|adj.|悲伤的
+safe|/seɪf/|adj.|安全的
+sail|/seɪl/|v.|航行
+salt|/sɔːlt/|n.|盐
+same|/seɪm/|adj.|相同的
+sand|/sænd/|n.|沙子
+Saturday|/ˈsætədeɪ/|n.|星期六
+save|/seɪv/|v.|拯救
+say|/seɪ/|v.|说
+school|/skuːl/|n.|学校
+science|/ˈsaɪəns/|n.|科学
+scientist|/ˈsaɪəntɪst/|n.|科学家
+score|/skɔː/|n.|分数
+sea|/siː/|n.|海洋
+season|/ˈsiːzn/|n.|季节
+seat|/siːt/|n.|座位
+second|/ˈsekənd/|num.|第二
+secret|/ˈsiːkrət/|n.|秘密
+see|/siː/|v.|看见
+seem|/siːm/|v.|似乎
+sell|/sel/|v.|卖
+send|/send/|v.|发送
+sentence|/ˈsentəns/|n.|句子
+September|/sepˈtembə/|n.|九月
+serious|/ˈsɪəriəs/|adj.|严肃的
+serve|/sɜːv/|v.|服务
+set|/set/|v.|设置
+seven|/ˈsevn/|num.|七
+seventeen|/ˌsevnˈtiːn/|num.|十七
+seventh|/ˈsevnθ/|num.|第七
+seventy|/ˈsevnti/|num.|七十
+several|/ˈsevrəl/|adj.|几个的
+shake|/ʃeɪk/|v.|摇动
+shall|/ʃæl/|v.|将
+shape|/ʃeɪp/|n.|形状
+she|/ʃiː/|pron.|她
+sheep|/ʃiːp/|n.|绵羊
+sheet|/ʃiːt/|n.|床单
+shelf|/ʃelf/|n.|架子
+shine|/ʃaɪn/|v.|照耀
+ship|/ʃɪp/|n.|船
+shirt|/ʃɜːt/|n.|衬衫
+shoe|/ʃuː/|n.|鞋子
+shop|/ʃɒp/|n.|商店
+short|/ʃɔːt/|adj.|短的
+should|/ʃʊd/|v.|应该
+shoulder|/ˈʃəʊldə/|n.|肩膀
+shout|/ʃaʊt/|v.|喊叫
+show|/ʃəʊ/|v.|展示
+sick|/sɪk/|adj.|生病的
+side|/saɪd/|n.|侧面
+sign|/saɪn/|n.|标志
+silent|/ˈsaɪlənt/|adj.|安静的
+silk|/sɪlk/|n.|丝绸
+simple|/ˈsɪmpl/|adj.|简单的
+since|/sɪns/|prep.|自从
+sing|/sɪŋ/|v.|唱歌
+singer|/ˈsɪŋə/|n.|歌手
+single|/ˈsɪŋɡl/|adj.|单一的
+sir|/sɜː/|n.|先生
+sister|/ˈsɪstə/|n.|姐妹
+sit|/sɪt/|v.|坐
+six|/sɪks/|num.|六
+sixteen|/ˌsɪkˈstiːn/|num.|十六
+sixth|/sɪksθ/|num.|第六
+sixty|/ˈsɪksti/|num.|六十
+size|/saɪz/|n.|尺寸
+skill|/skɪl/|n.|技能
+skin|/skɪn/|n.|皮肤
+skirt|/skɜːt/|n.|裙子
+sky|/skaɪ/|n.|天空
+sleep|/sliːp/|v.|睡觉
+slow|/sləʊ/|adj.|慢的
+small|/smɔːl/|adj.|小的
+smell|/smel/|v.|闻
+smile|/smaɪl/|v.|微笑
+smoke|/sməʊk/|v.|吸烟
+snow|/snəʊ/|n.|雪
+so|/səʊ/|adv.|如此
+soap|/səʊp/|n.|肥皂
+soccer|/ˈsɒkə/|n.|足球
+sock|/sɒk/|n.|袜子
+soft|/sɒft/|adj.|柔软的
+soldier|/ˈsəʊldʒə/|n.|士兵
+some|/sʌm/|adj.|一些的
+somebody|/ˈsʌmbədi/|pron.|某人
+someone|/ˈsʌmwʌn/|pron.|某人
+something|/ˈsʌmθɪŋ/|pron.|某物
+sometimes|/ˈsʌmtaɪmz/|adv.|有时
+son|/sʌn/|n.|儿子
+song|/sɒŋ/|n.|歌曲
+soon|/suːn/|adv.|很快
+sorry|/ˈsɒri/|adj.|抱歉的
+sound|/saʊnd/|n.|声音
+soup|/suːp/|n.|汤
+south|/saʊθ/|n.|南方
+space|/speɪs/|n.|空间
+speak|/spiːk/|v.|说话
+special|/ˈspeʃl/|adj.|特殊的
+speed|/spiːd/|n.|速度
+spell|/spel/|v.|拼写
+spend|/spend/|v.|花费
+sport|/spɔːt/|n.|运动
+spring|/sprɪŋ/|n.|春天
+square|/skweə/|n.|广场
+stamp|/stæmp/|n.|邮票
+stand|/stænd/|v.|站立
+star|/stɑː/|n.|星星
+start|/stɑːt/|v.|开始
+station|/ˈsteɪʃn/|n.|车站
+stay|/steɪ/|v.|停留
+steal|/stiːl/|v.|偷
+step|/step/|n.|步骤
+stick|/stɪk/|n.|棍子
+still|/stɪl/|adv.|仍然
+stomach|/ˈstʌmək/|n.|胃
+stone|/stəʊn/|n.|石头
+stop|/stɒp/|v.|停止
+store|/stɔː/|n.|商店
+storm|/stɔːm/|n.|风暴
+story|/ˈstɔːri/|n.|故事
+straight|/streɪt/|adj.|直的
+strange|/streɪndʒ/|adj.|奇怪的
+street|/striːt/|n.|街道
+strong|/strɒŋ/|adj.|强壮的
+student|/ˈstjuːdnt/|n.|学生
+study|/ˈstʌdi/|v.|学习
+stupid|/ˈstjuːpɪd/|adj.|愚蠢的
+subject|/ˈsʌbdʒɪkt/|n.|科目
+such|/sʌtʃ/|adj.|这样的
+suddenly|/ˈsʌdənli/|adv.|突然地
+sugar|/ˈʃʊɡə/|n.|糖
+suggest|/səˈdʒest/|v.|建议
+summer|/ˈsʌmə/|n.|夏天
+sun|/sʌn/|n.|太阳
+Sunday|/ˈsʌndeɪ/|n.|星期日
+sunny|/ˈsʌni/|adj.|晴朗的
+supermarket|/ˈsuːpəmɑːkɪt/|n.|超市
+supper|/ˈsʌpə/|n.|晚餐
+sure|/ʃʊə/|adj.|确定的
+surprise|/səˈpraɪz/|n.|惊喜
+sweet|/swiːt/|adj.|甜的
+swim|/swɪm/|v.|游泳
+table|/ˈteɪbl/|n.|桌子
+take|/teɪk/|v.|拿
+talk|/tɔːk/|v.|谈话
+tall|/tɔːl/|adj.|高的
+tape|/teɪp/|n.|磁带
+taste|/teɪst/|v.|品尝
+taxi|/ˈtæksi/|n.|出租车
+tea|/tiː/|n.|茶
+teach|/tiːtʃ/|v.|教
+teacher|/ˈtiːtʃə/|n.|老师
+team|/tiːm/|n.|团队
+tear|/tɪə/|n.|眼泪
+telephone|/ˈtelɪfəʊn/|n.|电话
+television|/ˈtelɪvɪʒn/|n.|电视
+tell|/tel/|v.|告诉
+temperature|/ˈtemprətʃə/|n.|温度
+ten|/ten/|num.|十
+tennis|/ˈtenɪs/|n.|网球
+tent|/tent/|n.|帐篷
+term|/tɜːm/|n.|学期
+terrible|/ˈterəbl/|adj.|可怕的
+test|/test/|n.|测试
+than|/ðən/|conj.|比
+thank|/θæŋk/|v.|感谢
+that|/ðæt/|pron.|那个
+the|/ðə/|art.|这
+theater|/ˈθɪətə/|n.|剧院
+their|/ðeə/|pron.|他们的
+theirs|/ðeəz/|pron.|他们的
+them|/ðəm/|pron.|他们
+themselves|/ðəmˈselvz/|pron.|他们自己
+then|/ðen/|adv.|然后
+there|/ðeə/|adv.|那里
+these|/ðiːz/|pron.|这些
+they|/ðeɪ/|pron.|他们
+thick|/θɪk/|adj.|厚的
+thin|/θɪn/|adj.|薄的
+thing|/θɪŋ/|n.|东西
+think|/θɪŋk/|v.|思考
+third|/θɜːd/|num.|第三
+thirsty|/ˈθɜːsti/|adj.|口渴的
+thirteen|/ˌθɜːˈtiːn/|num.|十三
+thirty|/ˈθɜːti/|num.|三十
+this|/ðɪs/|pron.|这个
+those|/ðəʊz/|pron.|那些
+though|/ðəʊ/|conj.|虽然
+thought|/θɔːt/|n.|思想
+thousand|/ˈθaʊznd/|num.|千
+three|/θriː/|num.|三
+through|/θruː/|prep.|通过
+throw|/θrəʊ/|v.|扔
+Thursday|/ˈθɜːzdeɪ/|n.|星期四
+ticket|/ˈtɪkɪt/|n.|票
+tidy|/ˈtaɪdi/|adj.|整洁的
+tie|/taɪ/|v.|系
+tiger|/ˈtaɪɡə/|n.|老虎
+till|/tɪl/|prep.|直到
+time|/taɪm/|n.|时间
+tired|/ˈtaɪəd/|adj.|疲倦的
+to|/tuː/|prep.|到
+today|/təˈdeɪ/|n.|今天
+together|/təˈɡeðə/|adv.|一起
+toilet|/ˈtɔɪlət/|n.|厕所
+tomato|/təˈmɑːtəʊ/|n.|番茄
+tomorrow|/təˈmɒrəʊ/|n.|明天
+tonight|/təˈnaɪt/|n.|今晚
+too|/tuː/|adv.|也
+tool|/tuːl/|n.|工具
+tooth|/tuːθ/|n.|牙齿
+top|/tɒp/|n.|顶部
+total|/ˈtəʊtl/|adj.|总的
+touch|/tʌtʃ/|v.|触摸
+tourist|/ˈtʊərɪst/|n.|游客
+toward|/təˈwɔːd/|prep.|朝向
+towel|/ˈtaʊəl/|n.|毛巾
+tower|/ˈtaʊə/|n.|塔
+town|/taʊn/|n.|城镇
+toy|/tɔɪ/|n.|玩具
+train|/treɪn/|n.|火车
+travel|/ˈtrævl/|v.|旅行
+tree|/triː/|n.|树
+trip|/trɪp/|n.|旅行
+trouble|/ˈtrʌbl/|n.|麻烦
+trousers|/ˈtraʊzəz/|n.|裤子
+truck|/trʌk/|n.|卡车
+true|/truː/|adj.|真实的
+trust|/trʌst/|v.|信任
+try|/traɪ/|v.|尝试
+Tuesday|/ˈtjuːzdeɪ/|n.|星期二
+turn|/tɜːn/|v.|转动
+twelfth|/twelfθ/|num.|第十二
+twelve|/twelv/|num.|十二
+twentieth|/ˈtwentiəθ/|num.|第二十
+twenty|/ˈtwenti/|num.|二十
+twice|/twaɪs/|adv.|两次
+two|/tuː/|num.|二
+type|/taɪp/|n.|类型
+ugly|/ˈʌɡli/|adj.|丑陋的
+uncle|/ˈʌŋkl/|n.|叔叔
+under|/ˈʌndə/|prep.|在...下面
+understand|/ˌʌndəˈstænd/|v.|理解
+unit|/ˈjuːnɪt/|n.|单元
+university|/ˌjuːnɪˈvɜːsəti/|n.|大学
+until|/ənˈtɪl/|prep.|直到
+up|/ʌp/|adv.|向上
+upon|/əˈpɒn/|prep.|在...上面
+us|/əs/|pron.|我们
+use|/juːz/|v.|使用
+useful|/ˈjuːsfl/|adj.|有用的
+usual|/ˈjuːʒuəl/|adj.|通常的
+usually|/ˈjuːʒuəli/|adv.|通常
+vacation|/vəˈkeɪʃn/|n.|假期
+vegetable|/ˈvedʒtəbl/|n.|蔬菜
+very|/ˈveri/|adv.|非常
+video|/ˈvɪdiəʊ/|n.|视频
+village|/ˈvɪlɪdʒ/|n.|村庄
+visit|/ˈvɪzɪt/|v.|参观
+visitor|/ˈvɪzɪtə/|n.|访客
+voice|/vɔɪs/|n.|声音
+volleyball|/ˈvɒlibɔːl/|n.|排球
+wait|/weɪt/|v.|等待
+wake|/weɪk/|v.|醒来
+walk|/wɔːk/|v.|走路
+wall|/wɔːl/|n.|墙
+want|/wɒnt/|v.|想要
+war|/wɔː/|n.|战争
+warm|/wɔːm/|adj.|温暖的
+wash|/wɒʃ/|v.|洗
+watch|/wɒtʃ/|v.|观看
+water|/ˈwɔːtə/|n.|水
+way|/weɪ/|n.|方式
+we|/wiː/|pron.|我们
+weak|/wiːk/|adj.|弱的
+wear|/weə/|v.|穿
+weather|/ˈweðə/|n.|天气
+Wednesday|/ˈwenzdeɪ/|n.|星期三
+week|/wiːk/|n.|周
+weekend|/ˌwiːkˈend/|n.|周末
+welcome|/ˈwelkəm/|v.|欢迎
+well|/wel/|adv.|好
+west|/west/|n.|西方
+wet|/wet/|adj.|湿的
+what|/wɒt/|pron.|什么
+when|/wen/|adv.|什么时候
+where|/weə/|adv.|在哪里
+whether|/ˈweðə/|conj.|是否
+which|/wɪtʃ/|pron.|哪一个
+while|/waɪl/|conj.|当...时
+white|/waɪt/|adj.|白色的
+who|/huː/|pron.|谁
+whole|/həʊl/|adj.|全部的
+whom|/huːm/|pron.|谁(宾格)
+whose|/huːz/|pron.|谁的
+why|/waɪ/|adv.|为什么
+wide|/waɪd/|adj.|宽的
+wife|/waɪf/|n.|妻子
+wild|/waɪld/|adj.|野生的
+will|/wɪl/|v.|将
+win|/wɪn/|v.|赢
+wind|/wɪnd/|n.|风
+window|/ˈwɪndəʊ/|n.|窗户
+windy|/ˈwɪndi/|adj.|有风的
+winter|/ˈwɪntə/|n.|冬天
+wish|/wɪʃ/|v.|希望
+with|/wɪð/|prep.|和
+without|/wɪˈðaʊt/|prep.|没有
+woman|/ˈwʊmən/|n.|女人
+wonder|/ˈwʌndə/|v.|想知道
+wonderful|/ˈwʌndəfl/|adj.|精彩的
+wood|/wʊd/|n.|木头
+word|/wɜːd/|n.|单词
+work|/wɜːk/|v.|工作
+worker|/ˈwɜːkə/|n.|工人
+world|/wɜːld/|n.|世界
+worry|/ˈwʌri/|v.|担心
+worse|/wɜːs/|adj.|更坏的
+worst|/wɜːst/|adj.|最坏的
+would|/wʊd/|v.|会
+write|/raɪt/|v.|写
+wrong|/rɒŋ/|adj.|错误的
+year|/jɪə/|n.|年
+yellow|/ˈjeləʊ/|adj.|黄色的
+yes|/jes/|adv.|是
+yesterday|/ˈjestədeɪ/|n.|昨天
+yet|/jet/|adv.|还
+you|/juː/|pron.|你
+young|/jʌŋ/|adj.|年轻的
+your|/jɔː/|pron.|你的
+yours|/jɔːz/|pron.|你的
+yourself|/jɔːˈself/|pron.|你自己
+yourselves|/jɔːˈselvz/|pron.|你们自己
+zero|/ˈzɪərəʊ/|num.|零
+zoo|/zuː/|n.|动物园
+    `;
+    
+    const words = [];
+    const lines = fullWordData.trim().split('\n');
+    
+    lines.forEach(line => {
+        const parts = line.split('|');
+        if (parts.length >= 4) {
+            words.push({
+                word: parts[0].trim(),
+                pronunciation: parts[1].trim(),
+                partOfSpeech: parts[2].trim(),
+                meaning: parts[3].trim(),
+                learned: false,
+                reviewCount: 0,
+                lastReviewed: null,
+                writingCount: 0,
+                lastWritten: null
+            });
+        }
+    });
+    
+    return words;
+}
+
+        // 保存词库
+        function saveWordLibrary() {
+            localStorage.setItem('auntVocabularyLibrary', JSON.stringify(globalWordLibrary));
+        }
+
+        // 更新词库统计
+        function updateLibraryStats() {
+            document.getElementById('libraryStats').textContent = `共 ${globalWordLibrary.length} 个单词`;
+        }
+
+        // 初始化单词数据
+        function initWords() {
+            loadProgress();
+            updateDailyMessage();
+            
+            allWords = currentUser.words;
+            
+            if (todayWords.length === 0) {
+                selectTodayWords();
+            } else {
+                updateDisplay();
+            }
+            updateStats();
+        }
+
+        // 切换标签页
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (tabName === 'stats') {
+                updateStats();
+            }
+        }
+
+        // 选择今日单词
+        function selectTodayWords() {
+            if (allWords.length === 0) {
+                showModal('提示', '词库还没有单词哦！请先导入词库。');
+                return;
+            }
+            
+            const unlearnedWords = allWords.filter(word => !word.learned);
+            
+            if (unlearnedWords.length === 0) {
+                showModal('太棒了！', `${currentUser.name}，所有单词都已经学会了！你真是太厉害了！`);
+                return;
+            }
+            
+            const wordCount = Math.min(30, unlearnedWords.length);
+            todayWords = [...unlearnedWords]
+                .sort(() => Math.random() - 0.5)
+                .slice(0, wordCount);
+            
+            currentWordIndex = 0;
+            dailyTasks.learn.completed = 0;
+            updateDisplay();
+            saveProgress();
+            
+            addLearningHistory('start', `开始学习 ${wordCount} 个新单词`);
+            
+            let startMsg = `${currentUser.name}，今天要学习 ${wordCount} 个新单词，陪你一起加油！`;
+            if (currentUser.name === '俊泽') {
+                startMsg = `俊泽宝贝，今天要学习 ${wordCount} 个新单词，像小勇士一样勇敢面对挑战吧！`;
+            }
+            showModal('开始学习！', startMsg);
+        }
+
+        // 切换显示意思（学习模式）
+        function toggleMeaning() {
+            if (todayWords.length === 0) return;
+            
+            const word = todayWords[currentWordIndex];
+            document.getElementById('pronunciation').textContent = word.pronunciation;
+            document.getElementById('partOfSpeech').textContent = word.partOfSpeech;
+            document.getElementById('meaning').textContent = word.meaning;
+            speakWord(word.word);
+        }
+
+        // 切换显示意思（复习模式）
+        function toggleReviewMeaning() {
+            if (reviewWords.length === 0) return;
+            
+            const word = reviewWords[currentReviewIndex];
+            document.getElementById('reviewPronunciation').textContent = word.pronunciation;
+            document.getElementById('reviewPartOfSpeech').textContent = word.partOfSpeech;
+            document.getElementById('reviewMeaning').textContent = word.meaning;
+            speakWord(word.word);
+        }
+
+        // 发音功能
+        function speakWord(text = null) {
+            const word = text || (reviewWords.length > 0 ? 
+                reviewWords[currentReviewIndex].word : 
+                todayWords[currentWordIndex].word);
+                
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            } else {
+                showModal('提示', '您的浏览器不支持语音功能，但没关系，我们可以继续学习！');
+            }
+        }
+
+        // 标记为已学会
+        function markLearned() {
+            if (todayWords.length === 0) return;
+            
+            const word = todayWords[currentWordIndex];
+            word.learned = true;
+            word.learnedDate = new Date().toISOString().split('T')[0];
+            
+            const allWordIndex = allWords.findIndex(w => w.word === word.word);
+            if (allWordIndex !== -1) {
+                allWords[allWordIndex].learned = true;
+                allWords[allWordIndex].learnedDate = word.learnedDate;
+            }
+            
+            dailyTasks.learn.completed++;
+            updateDisplay();
+            saveProgress();
+            
+            addLearningHistory('learn', `学会了单词: ${word.word}`);
+            
+            checkDailyTask('learn');
+            
+            if (dailyTasks.learn.completed === dailyTasks.learn.target) {
+                let congratsMsg = "太棒了！今日学习任务完成！为你骄傲！";
+                if (currentUser.name === '俊泽') {
+                    congratsMsg = "俊泽太厉害了！今日学习任务完成！给你一个大大的赞！";
+                }
+                showModal('任务完成！', congratsMsg);
+                addPoints(10);
+            }
+            
+            setTimeout(nextWord, 500);
+        }
+
+        // 下一个单词
+        function nextWord() {
+            if (todayWords.length === 0) return;
+            
+            currentWordIndex = (currentWordIndex + 1) % todayWords.length;
+            updateDisplay();
+        }
+
+        // 更新显示
+        function updateDisplay() {
+            if (todayWords.length === 0) {
+                document.getElementById('wordDisplay').textContent = '点击"今日单词"开始学习';
+                document.getElementById('pronunciation').textContent = '';
+                document.getElementById('partOfSpeech').textContent = '';
+                document.getElementById('meaning').textContent = '';
+                document.getElementById('progress').textContent = '今日进度: 0/0 (今日目标: 30个单词)';
+                return;
+            }
+            
+            const word = todayWords[currentWordIndex];
+            document.getElementById('wordDisplay').textContent = word.word;
+            document.getElementById('pronunciation').textContent = '';
+            document.getElementById('partOfSpeech').textContent = '';
+            document.getElementById('meaning').textContent = '';
+            
+            const learnedCount = allWords.filter(w => w.learned).length;
+            document.getElementById('progress').textContent = 
+                `今日进度: ${dailyTasks.learn.completed}/${dailyTasks.learn.target} (总学会: ${learnedCount}/${allWords.length})`;
+            
+            updateWordList();
+        }
+
+        // 更新单词列表
+        function updateWordList() {
+            const wordList = document.getElementById('wordList');
+            wordList.innerHTML = '';
+            
+            todayWords.forEach((word, index) => {
+                const div = document.createElement('div');
+                div.className = `word-item ${word.learned ? 'learned' : ''}`;
+                div.innerHTML = `
+                    <div class="word-info">
+                        <span>${index + 1}. ${word.learned ? '✅' : '⭕'}</span>
+                        <strong>${word.word}</strong>
+                        <span>${word.partOfSpeech}</span>
+                    </div>
+                    <div>${word.learned ? '已学会' : '学习中'}</div>
+                `;
+                div.onclick = () => {
+                    currentWordIndex = index;
+                    updateDisplay();
+                };
+                wordList.appendChild(div);
+            });
+        }
+
+        // 开始复习
+        function startReview() {
+            const learnedWords = allWords.filter(word => word.learned);
+            
+            if (learnedWords.length === 0) {
+                showModal('提示', '还没有学会的单词可以复习哦，先去学习一些新单词吧！');
+                return;
+            }
+            
+            const reviewCount = Math.min(20, learnedWords.length);
+            reviewWords = [...learnedWords]
+                .sort(() => Math.random() - 0.5)
+                .slice(0, reviewCount);
+            
+            currentReviewIndex = 0;
+            reviewCorrect = 0;
+            reviewTotal = reviewWords.length;
+            dailyTasks.review.completed = 0;
+            
+            updateReviewDisplay();
+            
+            addLearningHistory('review', `开始复习 ${reviewCount} 个单词`);
+            
+            let reviewMsg = `开始复习 ${reviewCount} 个单词，巩固记忆很重要！`;
+            if (currentUser.name === '俊泽') {
+                reviewMsg = `俊泽宝贝，开始复习 ${reviewCount} 个单词，温故而知新！`;
+            }
+            showModal('开始复习！', reviewMsg);
+        }
+
+        // 更新复习显示
+        function updateReviewDisplay() {
+            if (reviewWords.length === 0) {
+                document.getElementById('reviewWordDisplay').textContent = '点击"开始复习"进行复习';
+                document.getElementById('reviewPronunciation').textContent = '';
+                document.getElementById('reviewPartOfSpeech').textContent = '';
+                document.getElementById('reviewMeaning').textContent = '';
+                document.getElementById('reviewProgress').textContent = '复习进度: 0/0 (今日目标: 20个单词)';
+                return;
+            }
+            
+            const word = reviewWords[currentReviewIndex];
+            document.getElementById('reviewWordDisplay').textContent = word.word;
+            document.getElementById('reviewPronunciation').textContent = '';
+            document.getElementById('reviewPartOfSpeech').textContent = '';
+            document.getElementById('reviewMeaning').textContent = '';
+            document.getElementById('reviewProgress').textContent = 
+                `复习进度: ${currentReviewIndex + 1}/${reviewWords.length}`;
+            
+            updateReviewWordList();
+        }
+
+        // 更新复习单词列表
+        function updateReviewWordList() {
+            const wordList = document.getElementById('reviewWordList');
+            wordList.innerHTML = '';
+            
+            reviewWords.forEach((word, index) => {
+                const div = document.createElement('div');
+                div.className = `word-item ${index < currentReviewIndex ? 'learned' : ''}`;
+                div.innerHTML = `
+                    <div class="word-info">
+                        <span>${index + 1}. ${word.word}</span>
+                        <span>${word.partOfSpeech}</span>
+                    </div>
+                    <div>${index < currentReviewIndex ? '已复习' : '待复习'}</div>
+                `;
+                div.onclick = () => {
+                    currentReviewIndex = index;
+                    updateReviewDisplay();
+                };
+                wordList.appendChild(div);
+            });
+        }
+
+        // 标记为正确
+        function markCorrect() {
+            if (reviewWords.length === 0) return;
+            
+            const word = reviewWords[currentReviewIndex];
+            word.reviewCount = (word.reviewCount || 0) + 1;
+            word.lastReviewed = new Date().toISOString().split('T')[0];
+            reviewCorrect++;
+            dailyTasks.review.completed++;
+            
+            const allWordIndex = allWords.findIndex(w => w.word === word.word);
+            if (allWordIndex !== -1) {
+                allWords[allWordIndex].reviewCount = word.reviewCount;
+                allWords[allWordIndex].lastReviewed = word.lastReviewed;
+            }
+            
+            checkDailyTask('review');
+            
+            nextReviewWord();
+        }
+
+        // 标记为不正确
+        function markIncorrect() {
+            if (reviewWords.length === 0) return;
+            
+            const word = reviewWords[currentReviewIndex];
+            word.reviewCount = (word.reviewCount || 0) + 1;
+            word.lastReviewed = new Date().toISOString().split('T')[0];
+            dailyTasks.review.completed++;
+            
+            const allWordIndex = allWords.findIndex(w => w.word === word.word);
+            if (allWordIndex !== -1) {
+                allWords[allWordIndex].reviewCount = word.reviewCount;
+                allWords[allWordIndex].lastReviewed = word.lastReviewed;
+            }
+            
+            checkDailyTask('review');
+            
+            nextReviewWord();
+        }
+
+        // 下一个复习单词
+        function nextReviewWord() {
+            if (reviewWords.length === 0) return;
+            
+            currentReviewIndex++;
+            
+            if (currentReviewIndex >= reviewWords.length) {
+                const accuracy = Math.round((reviewCorrect / reviewTotal) * 100);
+                
+                addLearningHistory('review_complete', `复习完成，正确率: ${accuracy}%`);
+                
+                let reviewCompleteMsg = '';
+                if (accuracy >= 80) {
+                    reviewCompleteMsg = `太厉害了！复习正确率${accuracy}%，记忆很牢固！`;
+                } else if (accuracy >= 60) {
+                    reviewCompleteMsg = `不错哦！复习正确率${accuracy}%，继续努力！`;
+                } else {
+                    reviewCompleteMsg = `复习正确率${accuracy}%，有些单词还需要多练习，加油！`;
+                }
+                
+                if (currentUser.name === '俊泽') {
+                    if (accuracy >= 80) {
+                        reviewCompleteMsg = `俊泽太棒了！复习正确率${accuracy}%，小姨为你骄傲！`;
+                    } else if (accuracy >= 60) {
+                        reviewCompleteMsg = `俊泽不错哦！复习正确率${accuracy}%，继续加油！`;
+                    } else {
+                        reviewCompleteMsg = `俊泽，复习正确率${accuracy}%，没关系，多练习就会更好！`;
+                    }
+                }
+                
+                showModal('复习完成！', reviewCompleteMsg);
+                
+                reviewWords = [];
+                currentReviewIndex = 0;
+            }
+            
+            updateReviewDisplay();
+            saveProgress();
+        }
+
+        // 开始默写
+        function startWriting() {
+            const learnedWords = allWords.filter(word => word.learned);
+            
+            if (learnedWords.length === 0) {
+                showModal('提示', '还没有学会的单词可以默写哦，先去学习一些新单词吧！');
+                return;
+            }
+            
+            const writingCount = Math.max(20, Math.min(50, learnedWords.length));
+            writingWords = [...learnedWords]
+                .sort(() => Math.random() - 0.5)
+                .slice(0, writingCount);
+            
+            currentWritingIndex = 0;
+            writingCorrect = 0;
+            writingTotal = writingWords.length;
+            dailyTasks.writing.completed = 0;
+            
+            updateWritingDisplay();
+            
+            addLearningHistory('writing', `开始默写 ${writingCount} 个单词`);
+            
+            let writingMsg = `开始默写 ${writingCount} 个单词，检验学习成果！`;
+            if (currentUser.name === '俊泽') {
+                writingMsg = `俊泽宝贝，开始默写 ${writingCount} 个单词，看看你记得多牢固！`;
+            }
+            showModal('开始默写！', writingMsg);
+        }
+
+        // 更新默写显示
+        function updateWritingDisplay() {
+            if (writingWords.length === 0) {
+                document.getElementById('writingPartOfSpeech').textContent = '';
+                document.getElementById('writingMeaning').textContent = '';
+                document.getElementById('writingPronunciation').textContent = '';
+                document.getElementById('writingInput').value = '';
+                document.getElementById('writingFeedback').textContent = '';
+                document.getElementById('writingProgress').textContent = '默写进度: 0/0 (今日目标: 20个单词)';
+                return;
+            }
+            
+            const word = writingWords[currentWritingIndex];
+            document.getElementById('writingPartOfSpeech').textContent = word.partOfSpeech;
+            document.getElementById('writingMeaning').textContent = word.meaning;
+            document.getElementById('writingPronunciation').textContent = '';
+            document.getElementById('writingInput').value = '';
+            document.getElementById('writingFeedback').textContent = '';
+            document.getElementById('writingProgress').textContent = 
+                `默写进度: ${currentWritingIndex + 1}/${writingWords.length}`;
+            
+            updateWritingWordList();
+        }
+
+        // 显示提示
+        function showHint() {
+            if (writingWords.length === 0) return;
+            
+            const word = writingWords[currentWritingIndex];
+            document.getElementById('writingPronunciation').textContent = word.pronunciation;
+        }
+
+        // 检查默写答案
+        function checkWriting() {
+            if (writingWords.length === 0) return;
+            
+            const word = writingWords[currentWritingIndex];
+            const userAnswer = document.getElementById('writingInput').value.trim().toLowerCase();
+            const correctAnswer = word.word.toLowerCase();
+            
+            if (userAnswer === correctAnswer) {
+                document.getElementById('writingFeedback').innerHTML = 
+                    `<span class="correct-answer">✅ 太棒了！答案正确！</span>`;
+                writingCorrect++;
+                
+                word.writingCount = (word.writingCount || 0) + 1;
+                word.lastWritten = new Date().toISOString().split('T')[0];
+                
+                const allWordIndex = allWords.findIndex(w => w.word === word.word);
+                if (allWordIndex !== -1) {
+                    allWords[allWordIndex].writingCount = word.writingCount;
+                    allWords[allWordIndex].lastWritten = word.lastWritten;
+                }
+            } else {
+                document.getElementById('writingFeedback').innerHTML = 
+                    `<span class="incorrect-answer">❌ 再想想哦~ 正确答案是: <strong>${word.word}</strong></span>`;
+            }
+            
+            dailyTasks.writing.completed++;
+            
+            checkDailyTask('writing');
+            
+            setTimeout(nextWritingWord, 1000);
+        }
+
+        // 下一个默写单词
+        function nextWritingWord() {
+            if (writingWords.length === 0) return;
+            
+            currentWritingIndex++;
+            
+            if (currentWritingIndex >= writingWords.length) {
+                const accuracy = Math.round((writingCorrect / writingTotal) * 100);
+                
+                addLearningHistory('writing_complete', `默写完成，正确率: ${accuracy}%`);
+                
+                let writingCompleteMsg = '';
+                if (accuracy === 100) {
+                    writingCompleteMsg = `完美！默写全对！太厉害了！`;
+                    addPoints(20);
+                } else if (accuracy >= 80) {
+                    writingCompleteMsg = `太厉害了！默写正确率${accuracy}%，很棒！`;
+                    addPoints(15);
+                } else if (accuracy >= 60) {
+                    writingCompleteMsg = `不错哦！默写正确率${accuracy}%，继续加油！`;
+                    addPoints(10);
+                } else {
+                    writingCompleteMsg = `默写正确率${accuracy}%，多加练习会更好，明天继续努力！`;
+                    addPoints(5);
+                }
+                
+                if (currentUser.name === '俊泽') {
+                    if (accuracy === 100) {
+                        writingCompleteMsg = `俊泽太棒了！默写全对！小姨给你一个大大的拥抱！`;
+                    } else if (accuracy >= 80) {
+                        writingCompleteMsg = `俊泽真厉害！默写正确率${accuracy}%，小姨为你骄傲！`;
+                    } else if (accuracy >= 60) {
+                        writingCompleteMsg = `俊泽不错哦！默写正确率${accuracy}%，继续努力！`;
+                    } else {
+                        writingCompleteMsg = `俊泽，默写正确率${accuracy}%，没关系，明天我们再接再厉！`;
+                    }
+                }
+                
+                showModal('默写完成！', writingCompleteMsg);
+                
+                writingWords = [];
+                currentWritingIndex = 0;
+            }
+            
+            updateWritingDisplay();
+            saveProgress();
+        }
+
+        // 更新默写单词列表
+        function updateWritingWordList() {
+            const wordList = document.getElementById('writingWordList');
+            wordList.innerHTML = '';
+            
+            writingWords.forEach((word, index) => {
+                const div = document.createElement('div');
+                div.className = `word-item ${index < currentWritingIndex ? 'learned' : ''}`;
+                div.innerHTML = `
+                    <div class="word-info">
+                        <span>${index + 1}. ${index < currentWritingIndex ? word.word : '???'}</span>
+                        <span>${word.partOfSpeech}</span>
+                    </div>
+                    <div>${index < currentWritingIndex ? '已默写' : '待默写'}</div>
+                `;
+                wordList.appendChild(div);
+            });
+        }
+
+        // 检查每日任务完成情况
+        function checkDailyTask(taskType) {
+            const task = dailyTasks[taskType];
+            
+            if (task.completed >= task.target && !task.done) {
+                task.done = true;
+                addPoints(10);
+                
+                let message = "";
+                switch(taskType) {
+                    case 'learn':
+                        message = "🎉 完成了今日学习任务！获得10积分！";
+                        break;
+                    case 'review':
+                        message = "🎉 完成了今日复习任务！获得10积分！";
+                        break;
+                    case 'writing':
+                        message = "🎉 完成了今日默写任务！获得10积分！";
+                        break;
+                }
+                
+                if (currentUser.name === '俊泽') {
+                    message = `🎉 俊泽${message}`;
+                }
+                
+                showModal('任务完成！', message);
+                saveProgress();
+            }
+        }
+
+        // 添加积分
+        function addPoints(points) {
+            currentUser.points += points;
+            updatePointsDisplay();
+            saveProgress();
+        }
+
+        // 更新积分显示
+        function updatePointsDisplay() {
+            document.getElementById('pointsDisplay').textContent = currentUser.points;
+        }
+
+        // 更新每日消息
+        function updateDailyMessage() {
+            const messages = [
+                "今天也要加油哦！为你骄傲！",
+                "每个单词都是进步的机会！",
+                "坚持就是胜利，继续努力！",
+                "今天的努力，明天的成就！",
+                "相信你是最棒的！"
+            ];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            document.getElementById('dailyMessage').textContent = randomMessage;
+        }
+
+        // 添加学习历史
+        function addLearningHistory(type, description) {
+            const historyItem = {
+                date: new Date().toLocaleString(),
+                type: type,
+                description: description
+            };
+            
+            currentUser.learningHistory.unshift(historyItem);
+            if (currentUser.learningHistory.length > 20) {
+                currentUser.learningHistory = currentUser.learningHistory.slice(0, 20);
+            }
+            
+            saveProgress();
+        }
+
+        // 更新学习历史显示
+        function updateLearningHistory() {
+            const historyElement = document.getElementById('learningHistory');
+            historyElement.innerHTML = '';
+            
+            if (currentUser.learningHistory.length === 0) {
+                historyElement.innerHTML = '<p>今天还没有学习记录哦，快开始学习吧！</p>';
+                return;
+            }
+            
+            currentUser.learningHistory.forEach(item => {
+                const div = document.createElement('div');
+                div.style.padding = '10px';
+                div.style.borderBottom = '1px solid #eee';
+                div.innerHTML = `
+                    <div style="color: #666; font-size: 0.9em;">${item.date}</div>
+                    <div>${item.description}</div>
+                `;
+                historyElement.appendChild(div);
+            });
+        }
+
+        // 更新统计信息
+        function updateStats() {
+            const totalWords = allWords.length;
+            const learnedWords = allWords.filter(word => word.learned).length;
+            const learningProgress = totalWords > 0 ? Math.round((learnedWords / totalWords) * 100) : 0;
+            const totalReviews = allWords.reduce((sum, word) => sum + (word.reviewCount || 0), 0);
+            
+            document.getElementById('totalWords').textContent = totalWords;
+            document.getElementById('learnedWords').textContent = learnedWords;
+            document.getElementById('learningProgress').textContent = learningProgress + '%';
+            document.getElementById('reviewCount').textContent = totalReviews;
+            
+            document.getElementById('overallProgressBar').style.width = learningProgress + '%';
+            document.getElementById('overallProgressText').textContent = learningProgress + '%';
+            
+            const totalTasks = 3;
+            const completedTasks = Object.values(dailyTasks).filter(task => task.done).length;
+            const todayProgress = Math.round((completedTasks / totalTasks) * 100);
+            
+            document.getElementById('todayProgressBar').style.width = todayProgress + '%';
+            document.getElementById('todayProgressText').textContent = `今日进度: ${todayProgress}%`;
+            
+            const taskStatus = document.getElementById('taskStatus');
+            taskStatus.innerHTML = `
+                <div>✅ 学习新单词: ${dailyTasks.learn.completed}/${dailyTasks.learn.target} ${dailyTasks.learn.done ? '✓' : ''}</div>
+                <div>✅ 复习单词: ${dailyTasks.review.completed}/${dailyTasks.review.target} ${dailyTasks.review.done ? '✓' : ''}</div>
+                <div>✅ 单词默写: ${dailyTasks.writing.completed}/${dailyTasks.writing.target} ${dailyTasks.writing.done ? '✓' : ''}</div>
+            `;
+            
+            let specialMsg = "相信你是最棒的！继续加油！";
+            if (currentUser.name === '俊泽') {
+                specialMsg = "俊泽宝贝，小姨永远支持你！你是最棒的！";
+            }
+            document.getElementById('specialMessage').textContent = specialMsg;
+            
+            updateLearningHistory();
+        }
+
+        // 保存进度
+        function saveProgress() {
+            if (currentUser) {
+                currentUser.words = allWords;
+                currentUser.dailyTasks = dailyTasks;
+                currentUser.points = currentUser.points;
+                
+                allUsers[currentUser.phone] = currentUser;
+                saveUsers();
+            }
+        }
+
+        // 加载进度
+        function loadProgress() {
+            if (currentUser) {
+                allWords = currentUser.words;
+                dailyTasks = currentUser.dailyTasks || JSON.parse(JSON.stringify(dailyTasks));
+                
+                const savedDate = localStorage.getItem('auntVocabularyDate');
+                if (savedDate !== today) {
+                    dailyTasks = {
+                        learn: { target: 30, completed: 0, done: false },
+                        review: { target: 20, completed: 0, done: false },
+                        writing: { target: 20, completed: 0, done: false }
+                    };
+                    localStorage.setItem('auntVocabularyDate', today);
+                }
+            }
+        }
+
+        // 管理员功能
+        function toggleAdminPanel() {
+            const panel = document.getElementById('adminPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            if (panel.style.display === 'block') {
+                refreshUserData();
+            }
+        }
+
+        function refreshUserData() {
+            const userStats = document.getElementById('userStats');
+            let html = `
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>用户</th>
+                            <th>手机号</th>
+                            <th>积分</th>
+                            <th>学会单词</th>
+                            <th>学习进度</th>
+                            <th>加入日期</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            Object.values(allUsers).forEach(user => {
+                const learnedWords = user.words.filter(word => word.learned).length;
+                const totalWords = user.words.length;
+                const progress = totalWords > 0 ? Math.round((learnedWords / totalWords) * 100) : 0;
+                
+                html += `
+                    <tr>
+                        <td>${user.name} ${user.name === '俊泽' ? '👶' : ''}</td>
+                        <td>${user.phone}</td>
+                        <td>${user.points}</td>
+                        <td>${learnedWords}/${totalWords}</td>
+                        <td>${progress}%</td>
+                        <td>${user.joinDate}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `</tbody></table>`;
+            userStats.innerHTML = html;
+        }
+
+        function exportUserData() {
+            const dataStr = JSON.stringify(allUsers, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = '用户学习数据.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearAllData() {
+            if (confirm('确定要清空所有数据吗？此操作不可恢复！')) {
+                localStorage.clear();
+                allUsers = {};
+                globalWordLibrary = [];
+                showModal('提示', '所有数据已清空！');
+            }
+        }
+
+        function importFullVocabulary() {
+            showModal('提示', '请手动导入单词库数据');
+        }
+
+        function showImportDialog() {
+            showModal('提示', '更换词库功能开发中');
+        }
+
+        // 页面加载时初始化
+        window.onload = function() {
+            loadUsers();
+            loadWordLibrary();
+        };
+    </script>
+</body>
+</html>
